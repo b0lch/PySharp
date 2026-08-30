@@ -4,16 +4,11 @@ import subprocess
 import sys
 from pathlib import Path
 
+from pysharp import extensions as _ext
 
-# Add new type translations here later.
-TYPE_NAMES = {
-    "int": "int",
-    "string": "str",
-    "double": "float",
-    "float": "float",
-    "bool": "bool",
-    "object": "object",
-}
+
+# Load plugins (no-op if package missing)
+_ext.load_plugins()
 
 
 def translate_expression(expression):
@@ -32,6 +27,9 @@ def translate_expression(expression):
     expression = re.sub(r"\btrue\b", "True", expression)
     expression = re.sub(r"\bfalse\b", "False", expression)
     expression = re.sub(r"\bnull\b", "None", expression)
+
+    # Let plugins transform expressions
+    expression = _ext.apply_expression_transformers(expression)
 
     return expression.strip()
 
@@ -62,8 +60,9 @@ def translate_statement(statement):
     #
     # age = 20
     # name = "Alex"
+    type_pattern = _ext.get_type_pattern()
     declaration = re.match(
-        r"^(int|string|double|float|bool|object)\s+"
+        rf"^({type_pattern})\s+"
         r"([A-Za-z_]\w*)\s*(?:=\s*(.*))?$",
         statement,
     )
@@ -75,6 +74,11 @@ def translate_statement(statement):
             return f"{variable_name} = None"
 
         return f"{variable_name} = {translate_expression(value)}"
+
+    # Allow plugins to handle the statement before default translation
+    plugin_out = _ext.call_statement_handlers(statement)
+    if plugin_out:
+        return plugin_out
 
     # if (condition)
     match = re.match(r"^if\s*\((.*)\)$", statement)
