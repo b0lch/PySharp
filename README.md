@@ -19,6 +19,15 @@ If the `pysharp` launcher is on PATH you can run the shorter form:
 ```powershell
 pysharp .\examples\hello.therapy
 ```
+## Demo
+
+A small for-loop demo is included at [examples/for.therapy](examples/for.therapy). Run it like this:
+
+```powershell
+& "$env:APPDATA\Python\Python313\Scripts\pysharp.exe" .\examples\for.therapy
+```
+
+This demonstrates the `for (int i = 0; i < n; i++) { ... }` translation provided by the example plugin.
 
 If you prefer POSIX shells (macOS/Linux):
 
