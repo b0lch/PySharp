@@ -1,6 +1,6 @@
 # PySharp
 
-PySharp is a small C#-inspired language that transpiles `.therapy` files into Python.
+PySharp ist eine kleine an C# angelehnte Programmiersprache, die `.therapy` Datein in Python Compiliert.
 
 ## Usage
 
