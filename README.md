@@ -2,8 +2,6 @@
 
 PySharp ist eine kleine an C# angelehnte Programmiersprache, die `.therapy` Datein in Python Compiliert.
 
-## Usage
-
 
 ## Quick start (Windows)
 
