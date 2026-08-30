@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Editable install artifacts
+*.egg-info/
+
+# Byte-compiled / generated files
+*.generated.py
+
+# Editor and OS files
+.vscode/
+.DS_Store
+Thumbs.db
