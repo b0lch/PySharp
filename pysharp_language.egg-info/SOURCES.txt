@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+pysharp/__init__.py
+pysharp/cli.py
+pysharp_language.egg-info/PKG-INFO
+pysharp_language.egg-info/SOURCES.txt
+pysharp_language.egg-info/dependency_links.txt
+pysharp_language.egg-info/entry_points.txt
+pysharp_language.egg-info/top_level.txt
+tests/test_translator.py

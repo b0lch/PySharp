@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysharp-language"
+version = "0.1.0"
+description = "A small C#-inspired syntax translator for Python"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Your Name" }
+]
+
+[project.scripts]
+pysharp = "pysharp.cli:main"

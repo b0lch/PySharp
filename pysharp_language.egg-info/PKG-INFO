@@ -1,0 +1,25 @@
+Metadata-Version: 2.4
+Name: pysharp-language
+Version: 0.1.0
+Summary: A small C#-inspired syntax translator for Python
+Author: Your Name
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
+# PySharp
+
+PySharp is a small C#-inspired language that transpiles `.therapy` files into Python.
+
+## Usage
+
+Install the project in editable mode:
+
+```bash
+python -m pip install -e .
+```
+
+Then run a `.therapy` file:
+
+```bash
+pysharp examples/hello.therapy
+```

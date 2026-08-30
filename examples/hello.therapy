@@ -1,0 +1,9 @@
+using math;
+
+int number = 25;
+
+if (number > 0) {
+    print(math.sqrt(number));
+} else {
+    print("Invalid number");
+}
