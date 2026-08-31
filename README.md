@@ -29,6 +29,18 @@ A small for-loop demo is included at [examples/for.therapy](examples/for.therapy
 
 This demonstrates the `for (int i = 0; i < n; i++) { ... }` translation provided by the example plugin.
 
+### Writing tiny syntax plugins
+
+You can add new syntax in a single line by using `register_pattern` in
+`pysharp/plugins/`. Example (one line):
+
+```python
+from pysharp.extensions import register_pattern
+register_pattern(r'^say\s+"(.+)"$', 'print("{1}")')
+```
+
+This converts `say "Hi"` into `print("Hi")` with no core changes.
+
 If you prefer POSIX shells (macOS/Linux):
 
 ```bash

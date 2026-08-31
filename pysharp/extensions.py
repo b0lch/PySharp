@@ -6,6 +6,7 @@ statement handlers, or expression transformers. Plugins placed under
 from typing import Callable, Dict, List, Optional
 import importlib
 import pkgutil
+import re
 
 # Type name mapping: pysharp type -> python type name
 TYPE_NAMES: Dict[str, str] = {
@@ -41,6 +42,35 @@ def register_statement(handler: StatementHandler) -> None:
 def register_expression(transformer: ExpressionTransformer) -> None:
     """Register an expression transformer."""
     expression_transformers.append(transformer)
+
+
+def register_pattern(pattern: str, template: str, flags: int = 0) -> None:
+    """Convenience helper to register a simple statement->template rule.
+
+    Example:
+      register_pattern(r'^say\\s+\"(.+)\"$', 'print("{1}")')
+
+    The template may include placeholders `{1}`, `{2}`, ... for regex groups.
+    """
+    regex = re.compile(pattern, flags)
+
+    def handler(statement: str) -> Optional[str]:
+        m = regex.match(statement)
+        if not m:
+            return None
+
+        out = template
+        # Replace numbered placeholders
+        for i in range(0, (m.lastindex or 0) + 1):
+            key = '{%d}' % i
+            val = m.group(i) if i != 0 else m.group(0)
+            if val is None:
+                val = ''
+            out = out.replace(key, val)
+
+        return out
+
+    register_statement(handler)
 
 
 def get_type_pattern() -> str:
