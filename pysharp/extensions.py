@@ -1,5 +1,4 @@
-"""Simple extensibility API for PySharp translators.
-
+"""
 Plugins can call the registration functions below to add new type mappings,
 statement handlers, or expression transformers. Plugins placed under
 `pysharp.plugins` are auto-imported by `load_plugins()`.
