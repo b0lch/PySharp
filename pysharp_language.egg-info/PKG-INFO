@@ -2,7 +2,7 @@ Metadata-Version: 2.4
 Name: pysharp-language
 Version: 0.1.0
 Summary: A small C#-inspired syntax translator for Python
-Author: Your Name
+Author: Bergaxolotl
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 
