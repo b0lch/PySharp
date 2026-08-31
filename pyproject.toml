@@ -9,7 +9,7 @@ description = "A small C#-inspired syntax translator for Python"
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [
-    { name = "Your Name" }
+    { name = "Bergaxolotl" }
 ]
 
 [project.scripts]
