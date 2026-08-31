@@ -8,18 +8,52 @@ Description-Content-Type: text/markdown
 
 # PySharp
 
-PySharp is a small C#-inspired language that transpiles `.therapy` files into Python.
+PySharp ist eine kleine an C# angelehnte Programmiersprache, die `.therapy` Datein in Python Compiliert.
 
-## Usage
 
-Install the project in editable mode:
+## Quick start (Windows)
 
-```bash
+Copy-paste these commands from a PowerShell prompt:
+
+```powershell
+git clone https://github.com/b0lch/PySharp.git
+cd PySharp
 python -m pip install -e .
+& "$env:APPDATA\Python\Python313\Scripts\pysharp.exe" .\examples\hello.therapy
 ```
 
-Then run a `.therapy` file:
+If the `pysharp` launcher is on PATH you can run the shorter form:
+
+```powershell
+pysharp .\examples\hello.therapy
+```
+## Demo
+
+A small for-loop demo is included at [examples/for.therapy](examples/for.therapy). Run it like this:
+
+```powershell
+& "$env:APPDATA\Python\Python313\Scripts\pysharp.exe" .\examples\for.therapy
+```
+
+This demonstrates the `for (int i = 0; i < n; i++) { ... }` translation provided by the example plugin.
+
+### Writing tiny syntax plugins
+
+You can add new syntax in a single line by using `register_pattern` in
+`pysharp/plugins/`. Example (one line):
+
+```python
+from pysharp.extensions import register_pattern
+register_pattern(r'^say\s+"(.+)"$', 'print("{1}")')
+```
+
+This converts `say "Hi"` into `print("Hi")` with no core changes.
+
+If you prefer POSIX shells (macOS/Linux):
 
 ```bash
+git clone https://github.com/b0lch/PySharp.git
+cd PySharp
+python3 -m pip install -e .
 pysharp examples/hello.therapy
 ```

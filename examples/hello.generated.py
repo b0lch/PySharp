@@ -2,6 +2,7 @@ import math
 
 number = 25
 
+print("Hello World!")
 if number > 0:
     print(math.sqrt(number))
 else:

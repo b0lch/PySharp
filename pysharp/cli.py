@@ -12,21 +12,37 @@ _ext.load_plugins()
 
 
 def translate_expression(expression):
+    # Mask string literals so we don't transform contents inside quotes.
+    string_places = []
+
+    def _mask(m):
+        string_places.append(m.group(0))
+        return f"__STR{len(string_places)-1}__"
+
+    string_literal_pattern = re.compile(r'(?:(?:"(?:\\.|[^"\\])*")|(?:\'(?:\\.|[^\'\\])*\'))')
+    expression_masked = string_literal_pattern.sub(_mask, expression)
 
     # Operators
-    expression = expression.replace("&&", " and ")
-    expression = expression.replace("||", " or ")
+    expression_masked = expression_masked.replace("&&", " and ")
+    expression_masked = expression_masked.replace("||", " or ")
 
     # Replace ! but do not replace !=
-    expression = re.sub(r"!(?!=)", "not ", expression)
+    expression_masked = re.sub(r"!(?!=)", "not ", expression_masked)
 
     # Literals
-    expression = re.sub(r"\btrue\b", "True", expression)
-    expression = re.sub(r"\bfalse\b", "False", expression)
-    expression = re.sub(r"\bnull\b", "None", expression)
+    expression_masked = re.sub(r"\btrue\b", "True", expression_masked)
+    expression_masked = re.sub(r"\bfalse\b", "False", expression_masked)
+    expression_masked = re.sub(r"\bnull\b", "None", expression_masked)
 
     # Let plugins transform expressions
-    expression = _ext.apply_expression_transformers(expression)
+    expression_masked = _ext.apply_expression_transformers(expression_masked)
+
+    # Restore string literals
+    def _restore(match):
+        idx = int(match.group(1))
+        return string_places[idx]
+
+    expression = re.sub(r"__STR(\d+)__", _restore, expression_masked)
 
     return expression.strip()
 
@@ -42,7 +58,8 @@ def translate_statement(statement):
     if statement.endswith(";"):
         statement = statement[:-1].rstrip()
 
-    if statement.startswith("using "):
+    # 'using' can be an import or a resource-using block. Resource-using has parentheses.
+    if statement.startswith("using ") and not statement.startswith("using ("):
         return "import " + statement[6:].strip()
 
     type_pattern = _ext.get_type_pattern()
@@ -60,9 +77,25 @@ def translate_statement(statement):
 
         return f"{variable_name} = {translate_expression(value)}"
 
+    # Handle simple C-style for headers as a core fallback, e.g.
+    # for (int i = 0; i < n; i++)
+    type_pattern = _ext.get_type_pattern()
+    for_match = re.match(
+        rf'^for\s*\(\s*(?:({type_pattern})\s+)?([A-Za-z_]\w*)\s*=\s*(.+?)\s*;\s*\2\s*<\s*(.+?)\s*;\s*\2\+\+\s*\)$',
+        statement,
+    )
+
+    if for_match:
+        _, var_name, start_expr, end_expr = for_match.groups()
+        start = translate_expression(start_expr)
+        end = translate_expression(end_expr)
+        return f"for {var_name} in range({start}, {end}):"
+
     # Allow plugins to handle the statement before default translation
     plugin_out = _ext.call_statement_handlers(statement)
     if plugin_out:
+        if plugin_out.startswith("__RE__"):
+            return translate_statement(plugin_out[len("__RE__"):])
         return plugin_out
 
     # if (condition)

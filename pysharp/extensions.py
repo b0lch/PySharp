@@ -68,7 +68,8 @@ def register_pattern(pattern: str, template: str, flags: int = 0) -> None:
                 val = ''
             out = out.replace(key, val)
 
-        return out
+        # Prefix the output with a marker to indicate it should be re-processed
+        return '__RE__' + out
 
     register_statement(handler)
 
