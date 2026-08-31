@@ -12,9 +12,6 @@ _ext.load_plugins()
 
 
 def translate_expression(expression):
-    """
-    Converts C#-style expressions into Python-style expressions.
-    """
 
     # Operators
     expression = expression.replace("&&", " and ")
