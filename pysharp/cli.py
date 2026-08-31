@@ -90,7 +90,7 @@ def translate_statement(statement):
     return translate_expression(statement)
 
 
-def convert(source);
+def convert(source):
 
     output = []
     indentation = 0
