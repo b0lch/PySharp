@@ -32,9 +32,6 @@ def translate_expression(expression):
 
 
 def translate_statement(statement):
-    """
-    Converts one PySharp statement into Python.
-    """
 
     statement = statement.strip()
 
@@ -48,15 +45,6 @@ def translate_statement(statement):
     if statement.startswith("using "):
         return "import " + statement[6:].strip()
 
-    # Convert typed variable declarations:
-    #
-    # int age = 20
-    # string name = "Alex"
-    #
-    # into:
-    #
-    # age = 20
-    # name = "Alex"
     type_pattern = _ext.get_type_pattern()
     declaration = re.match(
         rf"^({type_pattern})\s+"
@@ -102,16 +90,7 @@ def translate_statement(statement):
     return translate_expression(statement)
 
 
-def convert(source):
-    """
-    Converts PySharp source into Python source.
-
-    Initial syntax rules:
-      - One statement per line
-      - Opening braces at the end of a line
-      - Closing braces on their own line
-      - Semicolons are optional
-    """
+def convert(source);
 
     output = []
     indentation = 0
